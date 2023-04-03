@@ -1,0 +1,80 @@
+// proto syntax 버전을 명시해줘야 한다.
+syntax = "proto3";
+
+// 서비스 이름 위에 주석을 달면 생성된 grpc컴파일 파일에 docstring으로 들어가게 된다.
+// 서비스 이름 Greeter
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+
+  // A simple RPC.
+  rpc GetFeature(Point) returns (Feature) {}
+
+  // A server-to-client streaming RPC.
+  rpc ListFeatures(Rectangle) returns (stream Feature) {}
+
+  // A client-to-server streaming RPC.
+  rpc RecordRoute(stream Point) returns (RouteSummary) {}
+
+  // A Bidirectional streaming RPC.
+  rpc RouteChat(stream RouteNote) returns (stream RouteNote) {}
+}
+
+
+// 호출시 사용하는 형식 정의(1은 field number)
+message HelloRequest {
+  string name = 1;
+}
+
+// 응답시 사용하는 형식(1은 field number)
+message HelloReply {
+  string message = 1;
+}
+
+
+message Feature {
+  // The name of the feature.
+  string name = 1;
+
+  // The point where the feature is detected.
+  Point location = 2;
+}
+
+
+message Point {
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+
+message Rectangle {
+  // One corner of the rectangle.
+  Point lo = 1;
+
+  // The other corner of the rectangle.
+  Point hi = 2;
+}
+
+
+message RouteSummary {
+  // The number of points received.
+  int32 point_count = 1;
+
+  // The number of known features passed while traversing the route.
+  int32 feature_count = 2;
+
+  // The distance covered in metres.
+  int32 distance = 3;
+
+  // The duration of the traversal in seconds.
+  int32 elapsed_time = 4;
+}
+
+
+message RouteNote {
+  // The location from which the message is sent.
+  Point location = 1;
+
+  // The message to be sent.
+  string message = 2;
+}
